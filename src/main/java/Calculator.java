@@ -1,6 +1,10 @@
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+
+import exception.NegativeNumberException;
+import util.Util;
 
 public class Calculator {
     private final List<Item> items  = new LinkedList<>();
@@ -14,8 +18,15 @@ public class Calculator {
             System.out.println("Введите товар");
             String name = sc.next();
             System.out.println("Введите цену в формате: рубли,копейки");
-            double price = sc.nextDouble();
-            items.add(new Item(name, price));
+            try {
+                double price = sc.nextDouble();
+                if (price <= 0) throw new NegativeNumberException("Введено отрицательное число");
+                items.add(new Item(name, price));
+            } catch (InputMismatchException e) {
+                System.out.println("Неверный формат данных");
+            } catch (NegativeNumberException e) {
+                System.out.println("Введена отрицательная цена");
+            }
 
             System.out.println("Для завершения ввода товаров введите завершить, в противном случае любой символ");
             String isClose = sc.next();
